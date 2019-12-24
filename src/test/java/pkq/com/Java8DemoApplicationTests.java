@@ -22,11 +22,12 @@ class Java8DemoApplicationTests {
                 new User("李六",48,44444.44),
                 new User("卢七",58,55555.55)
         );
+   //策略设计模式
     @Test
     public void getzjj(){
 
-      /*  List<User> users = getUsers(user, new UserTestIMP());
-        System.out.println(users);*/
+       List<User> users = getUsers(user, new UserTestIMP());
+        System.out.println(users);
     }
         public List<User> getCss(){
             List<User>  us = new ArrayList<>();
@@ -60,5 +61,22 @@ class Java8DemoApplicationTests {
             System.out.println(user1);
         }
     }
+//lambda表达式
+    @Test
+    public void test2(){
+        List<User> users = getUsers(user, (m) -> m.getAge() > 48);
+        users.forEach(System.out::println);
+    }
+//lambda表达式二
 
+    @Test
+    public void test3(){
+        user.stream()
+                .filter((e)-> e.getAge()>18)
+                .limit(2)
+                .forEach(System.out::println);
+        user.stream()
+                .map(User::getNaem)
+                .forEach(System.out::println);
+    }
 }
