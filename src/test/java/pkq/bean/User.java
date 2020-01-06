@@ -10,8 +10,9 @@ import java.util.Objects;
 public class User {
 
     private String naem;
-    private int age;
+    private Integer age;
     private double gz;
+    private Status Status;
 
 
 
@@ -23,11 +24,11 @@ public class User {
         this.naem = naem;
     }
 
-    public  int getAge() {
+    public  Integer getAge() {
         return age;
     }
 
-    public void setAge(int age) {
+    public void setAge(Integer age) {
         this.age = age;
     }
 
@@ -39,7 +40,7 @@ public class User {
         this.gz = gz;
     }
 
-    public User(String naem, int age, double gz) {
+   public User(String naem, Integer age, double gz) {
         this.naem = naem;
         this.age = age;
         this.gz = gz;
@@ -61,9 +62,24 @@ public class User {
                 "naem='" + naem + '\'' +
                 ", age=" + age +
                 ", gz=" + gz +
+                ", Status=" + Status +
                 '}';
     }
 
+    public Status getStatus() {
+        return Status;
+    }
+
+    public void setStatus(Status Status) {
+        this.Status = Status;
+    }
+
+    public User(String naem, Integer age, double gz,  pkq.bean.User.Status Status) {
+        this.naem = naem;
+        this.age = age;
+        this.gz = gz;
+        this.Status = Status;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -82,4 +98,9 @@ public class User {
 
     public void setNaem() {
     }
+
+   public enum Status{
+       Red, Orange,Yellow, Green;
+
+   }
 }
