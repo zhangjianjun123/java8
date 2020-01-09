@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import pkq.exec.Trader;
 import pkq.exec.Transaction;
+import pkq.service.MyUser;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -24,7 +25,7 @@ class TestStream04 {
                                 new Transaction(mario, 2012, 700),
                                 new Transaction(alan, 2012, 950));
 
-    public static void main(String[] args) {
+    public static void main7(String[] args) {
         Trader raoul = new Trader("Raoul", "Cambridge");
         Trader mario = new Trader("Mario", "Milan");
         Trader alan = new Trader("Alan", "Cambridge");
@@ -127,6 +128,13 @@ class TestStream04 {
             ss.add(c.toString());
         }
         return ss.stream();
+    }
+    //在这里extends类优先，其次就是implements的接口
+    //当implements两个interface的方法名字相同的时候class必须要实现具体的方法
+    public static void main(String[] args) {
+        UserContro us = new UserContro();
+        String aa = us.getNames();
+                System.out.println(aa);
     }
 }
 
