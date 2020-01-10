@@ -1,13 +1,22 @@
 package pkq.com;
 
 import jdk.management.resource.internal.inst.SocketOutputStreamRMHooks;
+import jdk.nashorn.internal.codegen.CompilerConstants;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.Execution;
 import org.springframework.boot.test.context.SpringBootTest;
 import pkq.exec.Trader;
 import pkq.exec.Transaction;
 import pkq.service.MyUser;
+import pkq.util.SDFThreadLocal;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.concurrent.*;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -131,11 +140,67 @@ class TestStream04 {
     }
     //在这里extends类优先，其次就是implements的接口
     //当implements两个interface的方法名字相同的时候class必须要实现具体的方法
-    public static void main(String[] args) {
+    public static void main8(String[] args) {
         UserContro us = new UserContro();
         String aa = us.getNames();
                 System.out.println(aa);
     }
+
+    /**
+     *之前的时间转换是线程不安全的
+     * 1.8是线程安全的
+     */
+    public static void main(String[] args) throws ExecutionException, InterruptedException {
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyyMMdd");
+
+        Callable<LocalDate> ld = new Callable<LocalDate>() {
+            @Override
+            public LocalDate call() throws Exception {
+                return LocalDate.parse("20180909",dtf);
+            }
+        };
+        //创建一个线程
+        ExecutorService ex = Executors.newFixedThreadPool(10);
+        ExecutorService ex1 = Executors.newFixedThreadPool(5);
+
+        List<Future<LocalDate>> ldd = new ArrayList<>();
+
+        for(int i=0; i<=10;i++){
+            ldd.add(ex.submit(ld));
+        }
+        for (Future<LocalDate> localDateFuture : ldd) {
+           // System.out.println(localDateFuture.get());
+        }
+
+        //-----------------------------------------------------------
+        MyThread  myThread = new MyThread();
+        for (int i = 0; i < 30; i++) {
+            ex.execute(myThread);
+            ex1.execute(myThread);
+
+        }
+
+          ex.shutdown();
+          ex1.shutdown();
+
+    }
+
+
+    static class MyThread implements Runnable {
+        Date date;
+        @Override
+        public void run() {
+
+            try {
+                System.out.println(SDFThreadLocal.parseSync("20190909")+"------------------"+Thread.currentThread().getName());
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+
+        }
+    }
+
 }
 
 
